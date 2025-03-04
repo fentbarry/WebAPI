@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.DAL;
 
@@ -21,6 +22,20 @@ namespace WebApplication1
                 p.UseNpgsql("name=PostgresLocal");
             });
 
+
+            // Add Identity
+            builder.Services
+                .AddIdentity<IdentityUser, IdentityRole>(options =>
+                {
+                    options.Password.RequiredUniqueChars = 0;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireDigit = false;
+                })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,9 +45,6 @@ namespace WebApplication1
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
 
             app.MapControllers();
 
