@@ -28,6 +28,17 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        [HttpGet("get")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var roles = await roleManager.Roles.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (roles == null)
+                return NotFound();
+
+            return Ok(roles);
+        }
+
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
