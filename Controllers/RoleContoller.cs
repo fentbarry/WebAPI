@@ -28,6 +28,24 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        [HttpGet("delete")]
+        public async Task<IActionResult> Delete([FromHeader] string id)
+        {
+            if (!await roleManager.RoleExistsAsync(id))
+                return NotFound();
+
+            var role = await roleManager.FindByIdAsync(id);
+
+            if (role == null)
+                return NotFound();
+
+            var result = await roleManager.DeleteAsync(role);
+            if (result.Succeeded)
+                return Ok();
+
+            return BadRequest(result.Errors);
+        }
+
         [HttpGet("get")]
         public async Task<IActionResult> GetById(string id)
         {
