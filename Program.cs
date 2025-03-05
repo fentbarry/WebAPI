@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.BLL.Services.Account;
 using WebApplication1.DAL;
 
 namespace WebApplication1
@@ -10,6 +11,8 @@ namespace WebApplication1
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddScoped<IAccountService, AccountService>();
 
             // Add services to the container.
 
