@@ -1,8 +1,10 @@
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.BLL.Services.Account;
+using WebApplication1.BLL.Services.Role;
 using WebApplication1.DAL;
+using WebApplication1.DAL.Init;
+using static WebApplication1.DAL.Models.AppIdentity;
 
 namespace WebApplication1
 {
@@ -13,12 +15,13 @@ namespace WebApplication1
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
 
             // Add services to the container.
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+            // builder.Services.AddOpenApi();
 
             // Add Db Context
             builder.Services.AddDbContext<AppDbContext>(p => {
@@ -28,7 +31,7 @@ namespace WebApplication1
 
             // Add Identity
             builder.Services
-                .AddIdentity<IdentityUser, IdentityRole>(options =>
+                .AddIdentity<AppUser, AppRole>(options =>
                 {
                     options.Password.RequiredUniqueChars = 0;
                     options.Password.RequiredLength = 6;
@@ -39,17 +42,22 @@ namespace WebApplication1
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
+            builder.Services.AddSwaggerGen();
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                //app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
 
             app.MapControllers();
+
+            app.Seed();
 
             app.Run();
         }

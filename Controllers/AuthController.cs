@@ -4,7 +4,7 @@ using WebApplication1.BLL.Services.Account;
 
 namespace WebApplication1.Controllers
 {
-    [Controller]
+    [ApiController]
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {

@@ -5,7 +5,7 @@ using WebApplication1.DAL.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Controller]
+    [ApiController]
     [Route("/api/cat")]
     public class CatController : ControllerBase
     {

@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.BLL.DTOs.Role;
 using WebApplication1.BLL.Services.Role;
-using WebApplication1.DAL;
 
 namespace WebApplication1.Controllers
 {
-    [Controller]
+    [ApiController]
     [Route("api/role")]
     public class RoleContoller : ControllerBase
     {
@@ -18,55 +15,48 @@ namespace WebApplication1.Controllers
             this.roleService = roleService;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] RoleDTO dto)
+        [HttpGet("list")]
+        public async Task<IActionResult> GetAllAsync()
         {
-            var result = await roleService.CreateAsync(dto);
-
-            if (result)
-                return Ok();
-
-            return BadRequest("Invalid role data");
+            var roles = await roleService.GetAllAsync();
+            return Ok(roles);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] RoleDTO dto)
-        {
-            var result = await roleService.UpdateAsync(dto);
-
-            if (result)
-                return Ok();
-
-            return BadRequest("Invalid role data");
-        }
-
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete (string id)
-        {
-            var result = await roleService.DeleteAsync(id);
-
-            if (result)
-                return Ok();
-
-            return BadRequest("Invalid id");
-        }
-
-
-        [HttpGet("get")]
-        public async Task<IActionResult> GetById(string id)
+        [HttpGet]
+        public async Task<IActionResult> GetByIdAsync(string? id)
         {
             if (string.IsNullOrEmpty(id))
                 return BadRequest("Id required");
 
-            var result = roleService.GetByIdAsync(id);
+            var role = await roleService.GetByIdAsync(id);
 
-            return Ok(result);
+            return role == null ? BadRequest("Role not found") : Ok(role);
         }
 
-        [HttpGet("getall")]
-        public async Task<IActionResult> GetAll()
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] RoleDTO dto)
         {
-            return Ok(await roleService.GetAllAsync());
+            var result = await roleService.CreateAsync(dto);
+
+            return result ? Ok("Role created") : BadRequest("Role not created");
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromBody] RoleDTO dto)
+        {
+            var result = await roleService.UpdateAsync(dto);
+
+            return result ? Ok("Role updated") : BadRequest("Role not updated");
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(string? id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return BadRequest("Id required");
+
+            var result = await roleService.DeleteAsync(id);
+            return result ? Ok("Role deleted") : BadRequest("Role not deleted");
         }
     }
 }
