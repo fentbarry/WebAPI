@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO dto)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDTO dto)
         {
             var result = await accountService.LoginAsync(dto);
 
@@ -24,6 +24,17 @@ namespace WebApplication1.Controllers
                 return BadRequest("Invalid login data");
 
             return Ok();
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterDTO dto)
+        {
+            var result = await accountService.RegisterAsync(dto);
+
+            if (result == null)
+                return BadRequest("User exists or creation failed.");
+
+            return Ok($"User {result.Id} created");
         }
     }
 }
