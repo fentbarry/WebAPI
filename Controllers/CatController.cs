@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.DAL;
 using WebApplication1.DAL.Models;
@@ -6,7 +7,8 @@ using WebApplication1.DAL.Models;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("/api/cat")]
+    [Route("api/cat")]
+    [Authorize]
     public class CatController : ControllerBase
     {
         private AppDbContext context;

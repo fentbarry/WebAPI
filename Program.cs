@@ -55,6 +55,9 @@ namespace WebApplication1
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.MapControllers();
 
             app.Seed();
